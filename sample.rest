@@ -1,5 +1,6 @@
 http://localhost:8080/v1
-POST /users
-{
-	"name": "Lane"
-}
+Authorization: ApiKey d348a9876e7b6b2362828499930dadd5c3cadd76582c3e1a01fb7a2c39612e4b
+GET /users
+
+# Get a user by api key in the authorization header
+

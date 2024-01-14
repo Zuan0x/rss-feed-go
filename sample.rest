@@ -1,6 +1,26 @@
 http://localhost:8080/v1
-Authorization: ApiKey d348a9876e7b6b2362828499930dadd5c3cadd76582c3e1a01fb7a2c39612e4b
-GET /users
+# GET /feeds
+# Authorization: ApiKey d348a9876e7b6b2362828499930dadd5c3cadd76582c3e1a01fb7a2c39612e4b
+# POST /feeds
+# {
+#   "name": "Hi The Boot.dev Blog",
+#   "url": "https://blog.boot.dev/index1.xml"
+# }
+
+# Authorization: ApiKey d348a9876e7b6b2362828499930dadd5c3cadd76582c3e1a01fb7a2c39612e4b
+# POST /feed_follows
+# {
+#   "feed_id": "4a82b372-b0e2-45e3-956a-b9b83358f86b"
+# }
+
 
 Authorization: ApiKey d348a9876e7b6b2362828499930dadd5c3cadd76582c3e1a01fb7a2c39612e4b
-GET /feeds
+GET /feed_follows
+
+# Authorization: ApiKey d348a9876e7b6b2362828499930dadd5c3cadd76582c3e1a01fb7a2c39612e4b
+# DELETE /feed_follows
+
+
+# Authorization: ApiKey d348a9876e7b6b2362828499930dadd5c3cadd76582c3e1a01fb7a2c39612e4b
+# GET /feed_follows
+

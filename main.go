@@ -1,18 +1,19 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 	"os"
-	
-	"database/sql"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
-	"github.com/Zuan0x/rss-feed-go/internal/database"
-)
 
-import _ "github.com/lib/pq"
+	"github.com/Zuan0x/rss-feed-go/internal/database"
+
+	_ "github.com/lib/pq"
+)
 
 type apiConfig struct {
 	DB *database.Queries
@@ -27,18 +28,19 @@ func main() {
 	}
 
 	dbURL := os.Getenv("DATABASE_URL")
+	if dbURL == "" {
+		log.Fatal("DATABASE_URL environment variable is not set")
+	}
 
 	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	dbQueries := database.New(db)
 
 	apiCfg := apiConfig{
 		DB: dbQueries,
 	}
-
 
 	router := chi.NewRouter()
 
@@ -52,11 +54,13 @@ func main() {
 	}))
 
 	v1Router := chi.NewRouter()
+
+	v1Router.Post("/users", apiCfg.handlerUsersCreate)
+	v1Router.Get("/users", apiCfg.middlewareAuth(apiCfg.handlerUsersGet))
+
+	v1Router.Post("/feeds", apiCfg.middlewareAuth(apiCfg.handlerFeedCreate))
 	v1Router.Get("/healthz", handlerReadiness)
 	v1Router.Get("/err", handlerErr)
-
-	v1Router.Post("/users", apiCfg.handlerCreateUser)
-	v1Router.Get("/users", apiCfg.handlerGetUser)
 
 	router.Mount("/v1", v1Router)
 	srv := &http.Server{

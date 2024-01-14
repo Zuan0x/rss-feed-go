@@ -2,6 +2,7 @@ package main
 
 import (
 	"time"
+	"database/sql"
 
 	"github.com/Zuan0x/rss-feed-go/internal/database"
 	"github.com/google/uuid"
@@ -32,6 +33,7 @@ type Feed struct {
 	Name      string    `json:"name"`
 	Url       string    `json:"url"`
 	UserID    uuid.UUID `json:"user_id"`
+	LastFetchedAt *time.Time `json:"last_fetched_at"`
 }
 
 func databaseFeedToFeed(feed database.Feed) Feed {
@@ -42,6 +44,7 @@ func databaseFeedToFeed(feed database.Feed) Feed {
 		Name:      feed.Name,
 		Url:       feed.Url,
 		UserID:    feed.UserID,
+		LastFetchedAt: nullTimeToTimePtr(feed.LastFetchedAt),
 	}
 }
 
@@ -77,4 +80,11 @@ func databaseFeedFollowsToFeedFollows(feedFollows []database.FeedFollow) []FeedF
 		result[i] = databaseFeedFollowToFeedFollow(feedFollow)
 	}
 	return result
+}
+
+func nullTimeToTimePtr(t sql.NullTime) *time.Time {
+	if t.Valid {
+		return &t.Time
+	}
+	return nil
 }
